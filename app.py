@@ -49,7 +49,7 @@ def index():
       result = []
       sentence = form['sentence']
       prediction = nlu.get_intent(sentence)[0]
-      per = nlu.get_intent(sentence)[1]*100
+      per = np.round(nlu.get_intent(sentence)[1]*100,2)
 
       result.append(form['sentence'])
       result.append(prediction)
