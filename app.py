@@ -3,15 +3,15 @@ from flask import Flask, render_template
 from flask import request
 
 import pickle
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+from tensorflow.python.keras.models import load_model
+from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 import numpy as np
+import tensorflow as tf
 
-
-
+global graph
 
 model = load_model('models/intents.h5')
-
+graph = tf.get_default_graph()
 
 with open('utils/tokenizer.pkl','rb') as file:
     tokenizer = pickle.load(file)
@@ -29,8 +29,8 @@ class IntentClassifier:
         self.text = [text]
         self.test_keras = self.tokenizer.texts_to_sequences(self.text)
         self.test_keras_sequence = pad_sequences(self.test_keras, maxlen=16, padding='post')
-    
-        self.pred = self.classifier.predict(self.test_keras_sequence)
+        with graph.as_default():
+            self.pred = self.classifier.predict(self.test_keras_sequence)
         return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0]
 
 app = Flask(__name__)
@@ -55,5 +55,6 @@ def index():
 
     return render_template("index.html")
 
-if __name__ == "__main__":
-	app.run(debug=True)
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
