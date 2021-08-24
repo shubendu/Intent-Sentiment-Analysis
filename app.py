@@ -31,7 +31,8 @@ class IntentClassifier:
         self.test_keras_sequence = pad_sequences(self.test_keras, maxlen=16, padding='post')
         with graph.as_default():
             self.pred = self.classifier.predict(self.test_keras_sequence)
-        return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0]
+        self.percentage = np.max(self.pred)#rm
+        return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0],self.precentage
 
 app = Flask(__name__)
 
@@ -46,10 +47,12 @@ def index():
         
       result = []
       sentence = form['sentence']
-      prediction = nlu.get_intent(sentence)
+      prediction = nlu.get_intent(sentence)[0]
+      per = nlu.get_intent(sentence)[1]*100
 
       result.append(form['sentence'])
       result.append(prediction)
+      result.append(per)
 
       return render_template("index.html",result = result)
 
