@@ -26,13 +26,14 @@ class IntentClassifier:
         self.label_encoder = label_encoder
 
     def get_intent(self,text):
+        acc=0
         self.text = [text]
         self.test_keras = self.tokenizer.texts_to_sequences(self.text)
         self.test_keras_sequence = pad_sequences(self.test_keras, maxlen=16, padding='post')
         with graph.as_default():
             self.pred = self.classifier.predict(self.test_keras_sequence)
-        self.percentage = np.max(self.pred)#rm
-        return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0],self.precentage
+        acc = np.max(self.pred)#rm
+        return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0],acc
 
 app = Flask(__name__)
 
