@@ -7,6 +7,7 @@ from tensorflow.python.keras.models import load_model
 from tensorflow.python.keras.preprocessing.sequence import pad_sequences
 import numpy as np
 import tensorflow as tf
+from textblob import TextBlob
 
 global graph
 
