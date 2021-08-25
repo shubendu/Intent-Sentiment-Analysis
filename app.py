@@ -28,13 +28,25 @@ class IntentClassifier:
 
     def get_intent(self,text):
         acc=0
+        sentiment = ''
+        pol = 0
         self.text = [text]
         self.test_keras = self.tokenizer.texts_to_sequences(self.text)
         self.test_keras_sequence = pad_sequences(self.test_keras, maxlen=16, padding='post')
         with graph.as_default():
             self.pred = self.classifier.predict(self.test_keras_sequence)
         acc = np.max(self.pred)#rm
-        return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0],acc
+        score = TextBlob(text).sentiment[0]
+        if score < 0:
+            sentiment = 'Negative'
+            pol = score
+        elif score == 0:
+            sentiment = 'Neutral'
+            pol = score
+        else:
+            sentiment = 'Positive'
+            pol = score
+        return self.label_encoder.inverse_transform(np.argmax(self.pred,1))[0],acc,sentiment,pol
 
 app = Flask(__name__)
 
@@ -51,10 +63,14 @@ def index():
       sentence = form['sentence']
       prediction = nlu.get_intent(sentence)[0]
       per = np.round(nlu.get_intent(sentence)[1]*100,2)
+      sentiment = nlu.get_intent(sentence)[2]
+      pol = nlu.get_intent(sentence)[3]
 
       result.append(form['sentence'])
       result.append(prediction)
       result.append(per)
+      result.append(sentiment)
+      result.append(pol)
 
       return render_template("index.html",result = result)
 
