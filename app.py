@@ -64,7 +64,7 @@ def index():
       prediction = nlu.get_intent(sentence)[0]
       per = np.round(nlu.get_intent(sentence)[1]*100,2)
       sentiment = nlu.get_intent(sentence)[2]
-      pol = nlu.get_intent(sentence)[3]
+      pol = np.round(nlu.get_intent(sentence)[3],3)
 
       result.append(form['sentence'])
       result.append(prediction)
