@@ -1,6 +1,8 @@
 # Intent and Sentiment classifier App
 > An app which is able to detect the polarity of sentence and intent of that sentence with confidence level.This project is done by using LSTM model with 90% accuracy and 0.50 loss on validation data.
 The data can be downloaded from [CLINC150](https://github.com/clinc/oos-eval) that contains 10 real-world problem domains having 150 distinct intent classes(with 15 classes in each domain), each with 100 train, 20 validation, 30 test samples.
+
+
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 
 # What is this dataset for?
